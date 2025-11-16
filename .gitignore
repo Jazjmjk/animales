@@ -1,0 +1,16 @@
+# Entorno virtual
+venv/
+*.pyc
+__pycache__/
+
+# Database local
+db.sqlite3
+
+# Archivos de entorno
+.env
+
+# Docker
+*.log
+
+# Archivos temporales
+*.tmp
