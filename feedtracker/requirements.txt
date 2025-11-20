@@ -1,3 +1,6 @@
 Django
 gunicorn
 djangorestframework
+
+mysqlclient==2.2.7
+python-decouple==3.8
