@@ -14,9 +14,6 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
-
-  
-
 # ---- Actualizar pip ----
 RUN pip install --upgrade pip
 
@@ -29,11 +26,14 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 # ---- Copiar todo el proyecto ----
 COPY feedtracker /app
 
-# ---- Recolectar archivos estáticos (incluye DRF) ----
-RUN python manage.py collectstatic --noinput
+# ---- Crear directorio para archivos estáticos ----
+RUN mkdir -p /app/staticfiles
 
-# ---- Exponer puerto para Django ----
+# ---- Recolectar archivos estáticos ----
+RUN python manage.py collectstatic --noinput --clear
+
+# ---- Exponer puerto (Railway usa PORT variable) ----
 EXPOSE 8000
 
 # ---- Comando por defecto ----
-CMD ["gunicorn", "feedtracker.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD gunicorn feedtracker.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 4 --timeout 120
